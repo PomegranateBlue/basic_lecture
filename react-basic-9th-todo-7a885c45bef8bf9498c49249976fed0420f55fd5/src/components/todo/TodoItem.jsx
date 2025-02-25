@@ -1,14 +1,17 @@
-import { useContext } from "react";
 import styled from "styled-components";
-import { TodoContext } from "../../context/TodoContext";
 import { Link, useNavigate } from "react-router";
+import {
+  useToggleTodoMutation,
+  useDeleteTodoMutation,
+} from "../../hooks/useTodoQuery";
 
 const TodoItem = ({ completed, text, id }) => {
-  const { toggleTodoCompleted, deleteTodo } = useContext(TodoContext);
   const navigate = useNavigate();
 
+  const { mutate: toggleTodoMutate } = useToggleTodoMutation();
+  const { mutate: deleteTodoMutate } = useDeleteTodoMutation();
   const navigateAfterDelete = (id) => {
-    deleteTodo(id);
+    deleteTodoMutate(id);
 
     navigate("/");
   };
@@ -21,7 +24,7 @@ const TodoItem = ({ completed, text, id }) => {
 
       <TodoItemActions>
         <ActionButton
-          onClick={() => toggleTodoCompleted(id, completed)}
+          onClick={() => toggleTodoMutate(id, completed)}
           $bgColor={completed ? "#242424" : "#582be6"}
         >
           {completed ? "취소하기" : "완료하기"}
