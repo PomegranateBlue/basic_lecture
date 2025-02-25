@@ -1,27 +1,28 @@
 import { FileCheck, LaptopMinimal, Video } from "lucide-react";
-
 import styled from "styled-components";
-
-import { Link } from "react-router";
-
+import { Link } from "react-router-dom";
+import { useFilterParams } from "../../hooks/useFilterParams";
+import { useTodoQuery } from "../../hooks/useTodoQuery";
 const TodoDashboard = () => {
+  const selectedFilter = useFilterParams();
 
+  const { data: all } = useTodoQuery();
+  const { data: completed } = useTodoQuery("completed");
+  const { data: pending } = useTodoQuery("pending");
 
-
-  const { data: all } = useQuery({
-    queryKey: ["todos"],
-    queryFn: () => getTodos(),
-  });
-
-  const { data: completed } = useQuery({
-    queryKey: ["todos", "completed"],
-    queryFn: () => getTodos("completed"),
-  });
-
-  const { data: pending } = useQuery({
-    queryKey: ["todos", "pending"],
-    queryFn: () => getTodos("pending"),
-  });
+  //원래는 아래와 같은 것을 커스텀 훅으로
+  // const { data: all } = useQuery({
+  //   queryKey: ["todos"],
+  //   queryFn: () => getTodos(),
+  // });
+  // const { data: completed } = useQuery({
+  //   queryKey: ["todos", "completed"],
+  //   queryFn: () => getTodos("completed"),
+  // });
+  // const { data: pending } = useQuery({
+  //   queryKey: ["todos", "pending"],
+  //   queryFn: () => getTodos("pending"),
+  // });
 
   return (
     <TodoDashboardSection>

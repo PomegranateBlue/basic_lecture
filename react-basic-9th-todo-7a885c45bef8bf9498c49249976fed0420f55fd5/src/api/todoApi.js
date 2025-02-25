@@ -6,7 +6,9 @@ export const todoClient = axios.create({
 
 export const getTodos = async (filter) => {
   const serachParams = new URLSearchParams();
+
   const { data } = await todoClient.get(`?${serachParams.toString()}`);
+  
   if (filter === "completed") {
     serachParams.append("completed", true);
   }
