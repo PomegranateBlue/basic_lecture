@@ -1,16 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { ActionButton } from "./TodoItem";
+import { TodoContext } from "../../context/TodoContext";
 
-import { useAddTodoMutation } from "../../hooks/useTodoQuery";
 const TodoForm = () => {
+  const { addTodos } = useContext(TodoContext);
   const [todoText, setTodoText] = useState("");
   const inputFocus = useRef(null);
-  const { mutate: addTodoMutate } = useAddTodoMutation();
+
   useEffect(() => {
     inputFocus.current.focus();
   }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -18,7 +18,7 @@ const TodoForm = () => {
       return;
     }
 
-    addTodoMutate(todoText);
+    addTodos(todoText);
 
     setTodoText("");
   };

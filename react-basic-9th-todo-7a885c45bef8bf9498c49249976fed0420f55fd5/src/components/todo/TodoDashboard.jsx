@@ -1,28 +1,17 @@
 import { FileCheck, LaptopMinimal, Video } from "lucide-react";
+import { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router";
-import { useFilterParams } from "../../hooks/useFilterParams";
-import { useTodoQuery } from "../../hooks/useTodoQuery";
+import { TodoContext } from "../../context/TodoContext";
+import { Link, useSearchParams } from "react-router";
+
 const TodoDashboard = () => {
-  const selectedFilter = useFilterParams();
+  const { getFilteredTodos } = useContext(TodoContext);
+  const [searchParams] = useSearchParams();
+  const selectedFilter = searchParams.get("filter");
 
-  const { data: all } = useTodoQuery();
-  const { data: completed } = useTodoQuery("completed");
-  const { data: pending } = useTodoQuery("pending");
-
-  //원래는 아래와 같은 것을 커스텀 훅으로
-  // const { data: all } = useQuery({
-  //   queryKey: ["todos"],
-  //   queryFn: () => getTodos(),
-  // });
-  // const { data: completed } = useQuery({
-  //   queryKey: ["todos", "completed"],
-  //   queryFn: () => getTodos("completed"),
-  // });
-  // const { data: pending } = useQuery({
-  //   queryKey: ["todos", "pending"],
-  //   queryFn: () => getTodos("pending"),
-  // });
+  const all = getFilteredTodos().length;
+  const completed = getFilteredTodos("completed").length;
+  const pending = all - completed;
 
   return (
     <TodoDashboardSection>
@@ -35,7 +24,7 @@ const TodoDashboard = () => {
               <FileCheck />
             </div>
             <TodoDashboardCardContent>
-              {all?.length} <br /> <span>All Tasks</span>
+              {all} <br /> <span>All Tasks</span>
             </TodoDashboardCardContent>
           </TodoDashboardCard>
         </TodoDashboardCardWrapper>
@@ -49,7 +38,7 @@ const TodoDashboard = () => {
               <LaptopMinimal />
             </div>
             <TodoDashboardCardContent>
-              {completed?.length} <br /> <span>Completed Tasks</span>
+              {completed} <br /> <span>Completed Tasks</span>
             </TodoDashboardCardContent>
           </TodoDashboardCard>
         </TodoDashboardCardWrapper>
@@ -63,7 +52,7 @@ const TodoDashboard = () => {
               <Video />
             </div>
             <TodoDashboardCardContent>
-              {pending?.length} <br /> <span>Pending Tasks</span>
+              {pending} <br /> <span>Pending Tasks</span>
             </TodoDashboardCardContent>
           </TodoDashboardCard>
         </TodoDashboardCardWrapper>
